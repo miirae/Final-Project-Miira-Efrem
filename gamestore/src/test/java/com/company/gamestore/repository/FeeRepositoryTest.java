@@ -1,6 +1,7 @@
 package com.company.gamestore.repository;
 
 import com.company.gamestore.model.Fee;
+import com.company.gamestore.model.Tax;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class FeeRepositoryTest {
@@ -47,5 +47,20 @@ public class FeeRepositoryTest {
         assertTrue(foundTax.isPresent());
         assertEquals(BigDecimal.valueOf(0.99), foundTax.get().getFee());
     }
+
+    @Test
+    public void getTaxByState() {
+        Optional<Fee> expectedFee = feeRepository.findByProductType("NA");
+        BigDecimal rate = expectedFee.get().getFee().stripTrailingZeros();
+        assertEquals(rate, new BigDecimal("0.01"));
+    }
+
+    @Test
+    public void testDeleteTax() {
+        feeRepository.deleteById("AN");
+        Optional<Fee> foundFee = feeRepository.findByProductType("AN");
+        assertFalse(foundFee.isPresent());
+    }
+
 
 }

@@ -6,10 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -28,6 +25,7 @@ public class Tax implements Serializable {
     @Column(name = "rate")
     @NotNull(message = "Tax rate cannot be null")
     @DecimalMin(value = "0.0", inclusive = false, message = "tax rate must be positive")
+    @Digits(integer = 6, fraction = 2, message = "Price must have at most 6 integer digits and 2 fraction digits")
     private BigDecimal rate;
 
     public Tax(){}

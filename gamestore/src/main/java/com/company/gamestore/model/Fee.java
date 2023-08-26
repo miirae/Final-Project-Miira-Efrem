@@ -6,10 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -21,12 +18,14 @@ public class Fee implements Serializable {
     // note backend product_type name is set to 50
     @Id
     @Column(name = "product_type")
+    @NotNull(message = "fee cannot be null")
     @Size(max = 50, message = "product type must be 50 chars or less")
     private String productType;
 
     @Column(name = "fee")
     @NotNull(message = "fee cannot be null")
     @DecimalMin(value = "0.0", inclusive = false, message = "fee must be positive")
+    @Digits(integer = 6, fraction = 2, message = "Price must have at most 6 integer digits and 2 fraction digits")
     private BigDecimal fee;
 
     public Fee(){}

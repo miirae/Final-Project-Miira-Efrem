@@ -9,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class TaxRepositoryTest {
@@ -46,6 +45,20 @@ public class TaxRepositoryTest {
         Optional<Tax> foundTax = taxRepository.findByState("NA");
         assertTrue(foundTax.isPresent());
         assertEquals(BigDecimal.valueOf(0.99), foundTax.get().getRate());
+    }
+
+    @Test
+    public void getTaxByState() {
+        Optional<Tax> expectedTax = taxRepository.findByState("NA");
+        BigDecimal rate = expectedTax.get().getRate().stripTrailingZeros();
+        assertEquals(rate, new BigDecimal("0.01"));
+    }
+
+    @Test
+    public void testDeleteTax() {
+        taxRepository.deleteById("AN");
+        Optional<Tax> foundTax = taxRepository.findByState("AN");
+        assertFalse(foundTax.isPresent());
     }
 
 }
