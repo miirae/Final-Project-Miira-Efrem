@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public class TshirtController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Tshirt addTshirt(@RequestBody Tshirt tshirt) {
+    public Tshirt addTshirt(@RequestBody @Valid Tshirt tshirt) {
         return tshirtRepository.save(tshirt);
     }
 
@@ -36,10 +37,9 @@ public class TshirtController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateTshirt(@RequestBody Tshirt tshirt, @PathVariable int id) {
-
+    public void updateTshirt(@RequestBody @Valid Tshirt tshirt, @PathVariable int id) {
         Optional<Tshirt> tshirt1 = tshirtRepository.findById(id);
-        if(tshirt1.isPresent()){
+        if (tshirt1.isPresent()) {
             tshirtRepository.save(tshirt);
         }
     }
@@ -47,17 +47,21 @@ public class TshirtController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTshirt(@PathVariable int id) {
-        tshirtRepository.deleteById(id);
+        Optional<Tshirt> tshirt1 = tshirtRepository.findById(id);
+        if (tshirt1.isPresent()) {
+            tshirtRepository.deleteById(id);
+        }
     }
 
     @GetMapping("/tshirtcolor/{color}")
     public List<Tshirt> findByColor(@PathVariable String color) {
-        return tshirtRepository.findByColor(color);
+        List<Tshirt> tshirts = tshirtRepository.findByColor(color);
+        return tshirts;
     }
 
     @GetMapping("/tshirtsize/{size}")
     public List<Tshirt> findBySize(@PathVariable String size) {
-        return tshirtRepository.findBySize(size);
+        List<Tshirt> tshirts = tshirtRepository.findBySize(size);
+        return tshirts;
     }
-
 }
