@@ -26,7 +26,7 @@ public class Tshirt implements Serializable {
     @Size(max = 255, message = "Tshirt description must be 255 chars or less")
     private String description;
     @NotNull(message = "Price must not be null")
-    @Digits(integer = 3, fraction = 2, message = "Price must have at most 3 integer digits and 2 fraction digits")
+    @Digits(integer = 5, fraction = 2, message = "Price must have at most 3 integer digits and 2 fraction digits")
     private double price;
     @Positive(message = "quantity must be a positive integer")
     private int quantity;
