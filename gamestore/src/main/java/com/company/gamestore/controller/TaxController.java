@@ -1,7 +1,7 @@
-package com.company.gamestore.controllers;
+package com.company.gamestore.controller;
 
-import com.company.gamestore.models.Tax;
-import com.company.gamestore.repositories.TaxRepository;
+import com.company.gamestore.model.Tax;
+import com.company.gamestore.repository.TaxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ public class TaxController {
         return taxRepository.save(tax);
     }
 
-    @GetMapping(path = "/tax/{state)")
+    @GetMapping(path = "/tax/{state}")
     @ResponseStatus(HttpStatus.OK)
     public Optional<Tax> getTaxbyState(@PathVariable String state){
         return taxRepository.findById(state);
@@ -33,7 +33,7 @@ public class TaxController {
         return taxRepository.save(tax);
     }
 
-    @DeleteMapping("/tax/{state)")
+    @DeleteMapping("/tax/{state}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTax(@PathVariable String state){
         taxRepository.deleteById(state);

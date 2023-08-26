@@ -1,7 +1,7 @@
-package com.company.gamestore.controllers;
+package com.company.gamestore.controller;
 
-import com.company.gamestore.models.Fee;
-import com.company.gamestore.repositories.FeeRepository;
+import com.company.gamestore.model.Fee;
+import com.company.gamestore.repository.FeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ public class FeeController {
         return feeRepository.save(fee);
     }
 
-    @PostMapping("/fee/{productType}")
+    @GetMapping("/fee/{productType}")
     @ResponseStatus(HttpStatus.OK)
     public Optional<Fee> getFeeByProductType(@PathVariable String productType) {
         return feeRepository.findById(productType);
@@ -33,7 +33,7 @@ public class FeeController {
         return feeRepository.save(fee);
     }
 
-    @DeleteMapping("/fees/{productType}")
+    @DeleteMapping("/fee/{productType}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteFee(@PathVariable String productType) {
         feeRepository.deleteById(productType);

@@ -1,4 +1,4 @@
-package com.company.gamestore.models;
+package com.company.gamestore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -25,8 +26,8 @@ public class Tax implements Serializable {
     private String state;
 
     @Column(name = "rate")
-    @NotEmpty(message = "Tax rate cannot be null")
-    @DecimalMin(value = "0.00", message = "tax rate must be positive")
+    @NotNull(message = "Tax rate cannot be null")
+    @DecimalMin(value = "0.0", inclusive = false, message = "tax rate must be positive")
     private BigDecimal rate;
 
     public Tax(){}

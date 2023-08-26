@@ -1,4 +1,4 @@
-package com.company.gamestore.models;
+package com.company.gamestore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -23,7 +25,8 @@ public class Fee implements Serializable {
     private String productType;
 
     @Column(name = "fee")
-    @NotEmpty(message = "fee value cannot be null")
+    @NotNull(message = "fee cannot be null")
+    @DecimalMin(value = "0.0", inclusive = false, message = "fee must be positive")
     private BigDecimal fee;
 
     public Fee(){}
