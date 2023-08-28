@@ -28,7 +28,7 @@ public class GameController {
         return gameRepository.findAll();
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Game getGameById(@PathVariable int id) {
         Optional<Game> game = gameRepository.findById(id);
@@ -53,7 +53,7 @@ public class GameController {
         return gameRepository.findByStudio(studio);
     }
 
-    @GetMapping("/esrbRating/{esrb_rating}")
+    @GetMapping("/esrbRating/{esrbRating}")
     @ResponseStatus(HttpStatus.OK)
     public List<Game> findByEsrbRating(@PathVariable String esrbRating) {
         return gameRepository.findByEsrbRating(esrbRating);
