@@ -23,6 +23,7 @@ public class Console implements Serializable {
     @Size(max = 50, message = "manufacturer can be up to 50 chars")
     private String manufacturer;
 
+    @Column(name = "memory_amount")
     @Size(max = 20, message = "memoryAmount can be up to 20 chars")
     private String memoryAmount;
 
