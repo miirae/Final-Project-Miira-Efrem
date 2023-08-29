@@ -58,4 +58,14 @@ public class ControllerExceptionHandler {
         response.setTimestamp(LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+
+    // used in service layer for invalid arguments/logic
+    @ExceptionHandler(value = {IllegalArgumentException.class})
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ResponseEntity<CustomErrorResponse> illegalArgumentValidationError(IllegalArgumentException e){
+        CustomErrorResponse response = new CustomErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.toString(), e.getMessage());
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 }
