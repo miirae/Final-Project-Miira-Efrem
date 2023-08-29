@@ -1,0 +1,18 @@
+
+type Game {
+    gameId: Int!
+    title: String!
+    esrbRating: String!
+    description: String!
+    price: Float!
+    studio: String!
+    quantity: Int
+}
+
+type Query {
+    findAllGames: [Game]
+    findGameById(gameId: Int): Game
+    findGameByEsrbRating(esrbRating: String): [Game]
+    findGameByTitle(title: String): [Game]
+    findGameByStudio(studio: String): [Game]
+}
