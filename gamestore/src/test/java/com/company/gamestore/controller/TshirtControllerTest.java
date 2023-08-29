@@ -42,7 +42,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void addTshirtTest() throws Exception{
+    public void ShouldAddTShirt() throws Exception{
         when(tshirtRepository.save(any(Tshirt.class))).thenReturn(tshirt);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -53,7 +53,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void getTshirtByIdTest() throws Exception {
+    public void ShouldGetTShirtById() throws Exception {
         when(tshirtRepository.findById(1)).thenReturn(Optional.of(tshirt));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -62,7 +62,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void getAllTshirtTest() throws Exception {
+    public void ShouldGetAllTShirts() throws Exception {
 
         when(tshirtRepository.findAll()).thenReturn(Collections.singletonList(tshirt));
 
@@ -73,7 +73,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void updateTshirtTest() throws Exception {
+    public void ShouldUpdateTShirt() throws Exception {
         when(tshirtRepository.findById(anyInt())).thenReturn(Optional.of(tshirt));
         when(tshirtRepository.save(any(Tshirt.class))).thenReturn(tshirt);
 
@@ -86,7 +86,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void deleteTshirtTest() throws Exception {
+    public void ShouldDeleteTShirt() throws Exception {
         when(tshirtRepository.findById(1)).thenReturn(Optional.of(tshirt));
         doNothing().when(tshirtRepository).deleteById(1);
 
@@ -96,7 +96,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void getTshirtByColorTest() throws Exception {
+    public void ShouldGetTShirtByColor() throws Exception {
         when(tshirtRepository.findByColor("peach")).thenReturn(Collections.singletonList(tshirt));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -105,7 +105,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void getTshirtBySizeTest() throws Exception {
+    public void ShouldGetTShirtBySize() throws Exception {
         when(tshirtRepository.findBySize("S")).thenReturn(Collections.singletonList(tshirt));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -114,7 +114,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void addNegativeTshirtPriceTest() throws Exception {
+    public void ShouldNotAddNegativeTShirtPrices() throws Exception {
 
         Tshirt negativeTshirtPrice = new Tshirt();
         negativeTshirtPrice.setSize("L");
@@ -133,7 +133,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void getAllTshirtsNotFoundTest() throws Exception {
+    public void ShouldNotGetNonExistingTShirts() throws Exception {
         when(tshirtRepository.findAll()).thenReturn(Collections.emptyList());
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/tshirts"))
@@ -141,7 +141,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void findByColorNotFoundTest() throws Exception {
+    public void ShouldNotGetNonExistingTShirtColor() throws Exception {
         when(tshirtRepository.findByColor("blue")).thenReturn(Collections.emptyList());
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -150,7 +150,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void findBySizeNotFoundTest() throws Exception {
+    public void ShouldNotGetNonExistingTShirtSize() throws Exception {
         when(tshirtRepository.findByColor("XXL")).thenReturn(Collections.emptyList());
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -159,7 +159,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void updateTshirtNotFoundTest() throws Exception {
+    public void ShouldNotUpdateNonExistingTShirt() throws Exception {
         when(tshirtRepository.save(any(Tshirt.class))).thenReturn(tshirt);
         
         mockMvc.perform(MockMvcRequestBuilders
@@ -170,7 +170,7 @@ public class TshirtControllerTest {
     }
 
     @Test
-    public void deleteTshirtNotFoundTest() throws Exception {
+    public void ShouldNotDeleteNonExistingTShirt() throws Exception {
         doNothing().when(tshirtRepository).deleteById(1);
 
         mockMvc.perform(MockMvcRequestBuilders
