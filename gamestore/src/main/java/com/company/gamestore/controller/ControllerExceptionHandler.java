@@ -42,6 +42,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public final ResponseEntity<CustomErrorResponse> notFoundException(NotFoundException e) {
         CustomErrorResponse response = new CustomErrorResponse(HttpStatus.NOT_FOUND.toString(), e.getMessage());
         response.setStatus(HttpStatus.NOT_FOUND.value());
@@ -50,6 +51,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public final ResponseEntity<CustomErrorResponse> handleAllExceptions(Exception e) {
         CustomErrorResponse response = new CustomErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage());
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
