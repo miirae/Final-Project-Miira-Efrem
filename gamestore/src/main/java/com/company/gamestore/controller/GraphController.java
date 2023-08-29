@@ -1,6 +1,8 @@
 package com.company.gamestore.controller;
 
+import com.company.gamestore.model.Console;
 import com.company.gamestore.model.Game;
+import com.company.gamestore.repository.ConsoleRepository;
 import com.company.gamestore.repository.GameRepository;
 import org.springframework.aop.target.LazyInitTargetSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,8 @@ public class GraphController {
     @Autowired
     GameRepository gameRepository;
 
-    //@Autowired
-    //ConsoleRepository consoleRepository;
+    @Autowired
+    ConsoleRepository consoleRepository;
 
     @QueryMapping
     public List<Game> findAllGames() { return gameRepository.findAll();}
@@ -30,12 +32,12 @@ public class GraphController {
     @QueryMapping
     public List<Game> findGameByStudio(@Argument String studio) {return gameRepository.findByStudio(studio);}
 
-//    @QueryMapping
-//    public List<Console> findAllConsoles() { return consoleRepository.findAll();}
-//    @QueryMapping
-//    public Console findConsoleById(@Argument Integer consoleId) { return consoleRepository.findById(consoleId).get();}
-//    @QueryMapping
-//    public List<Console> findConsoleByManufacturer(@Argument String manufacturer) {return consoleRepository.findByManufacturer(manufacturer);}
+    @QueryMapping
+    public List<Console> findAllConsoles() { return consoleRepository.findAll();}
+    @QueryMapping
+    public Console findConsoleById(@Argument Integer consoleId) { return consoleRepository.findById(consoleId).get();}
+    @QueryMapping
+    public List<Console> findConsoleByManufacturer(@Argument String manufacturer) {return consoleRepository.findByManufacturer(manufacturer);}
 
 
 }
