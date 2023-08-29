@@ -32,8 +32,7 @@ public class Invoice implements Serializable {
 
     public Invoice(){}
 
-    public Invoice(int id, String name, String street, String city, String state, String zipcode, String itemType, int itemId, BigDecimal unitPrice, int quantity, BigDecimal subtotal, BigDecimal tax, BigDecimal processingFee, BigDecimal total) {
-        this.id = id;
+    public Invoice(String name, String street, String city, String state, String zipcode, String itemType, int itemId, BigDecimal unitPrice, int quantity, BigDecimal subtotal, BigDecimal tax, BigDecimal processingFee, BigDecimal total) {
         this.name = name;
         this.street = street;
         this.city = city;
