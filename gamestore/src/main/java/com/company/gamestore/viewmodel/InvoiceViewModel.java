@@ -9,6 +9,7 @@ public class InvoiceViewModel {
     private int id;
 
     @NotNull(message = "You must supply a value for name.")
+    //@Pattern(regexp = "(?i)game|console|tshirt", message = "invalid type")
     @Size(max = 50, message = "Name length must be 50 chars or less.")
     private String name;
 
