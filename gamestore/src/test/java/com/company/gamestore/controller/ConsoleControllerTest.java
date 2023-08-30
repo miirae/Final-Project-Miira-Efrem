@@ -40,7 +40,7 @@ public class ConsoleControllerTest {
         console.setConsoleId(0);
         console.setModel("PS4");
         console.setManufacturer("Sony");
-        console.setPrice(200.00);
+        console.setPrice(BigDecimal.valueOf(200.00));
         console.setQuantity(10);
     }
 
@@ -82,7 +82,7 @@ public class ConsoleControllerTest {
 
     @Test
     void updateConsole() throws Exception {
-        console.setPrice(450);
+        console.setPrice(BigDecimal.valueOf(450));
         String inputJson = mapper.writeValueAsString(console);
         mockmvc.perform(put("/consoles/" + console.getConsoleId())
                         .content(inputJson)

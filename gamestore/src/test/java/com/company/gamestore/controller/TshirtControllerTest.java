@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class TshirtControllerTest {
         tshirt.setSize("S");
         tshirt.setColor("peach");
         tshirt.setDescription("made with 100% cotton");
-        tshirt.setPrice(10.99);
+        tshirt.setPrice(BigDecimal.valueOf(10.99));
         tshirt.setQuantity(1);
     }
 
@@ -120,7 +121,7 @@ public class TshirtControllerTest {
         negativeTshirtPrice.setSize("L");
         negativeTshirtPrice.setColor("Black");
         negativeTshirtPrice.setDescription("made with 100% polyester");
-        negativeTshirtPrice.setPrice(-10.99);
+        negativeTshirtPrice.setPrice(BigDecimal.valueOf(-10.99));
         negativeTshirtPrice.setQuantity(2);
 
         tshirtRepository.save(negativeTshirtPrice);

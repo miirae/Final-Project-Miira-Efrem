@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -28,7 +29,7 @@ public class Tshirt implements Serializable {
     @NotNull(message = "Price must not be null")
     @Positive(message = "price must be a positive number")
     @Digits(integer = 5, fraction = 2, message = "Price must have at most 3 integer digits and 2 fraction digits")
-    private double price;
+    private BigDecimal price;
     @NotNull(message = "Quantity must not be null")
     @Positive(message = "quantity must be a positive integer")
     private int quantity;
@@ -65,11 +66,11 @@ public class Tshirt implements Serializable {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -84,9 +85,9 @@ public class Tshirt implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Tshirt)) return false;
         Tshirt tshirt = (Tshirt) o;
-        return tshirtId == tshirt.tshirtId && Double.compare(tshirt.price, price) == 0 && quantity == tshirt.quantity && Objects.equals(size, tshirt.size) && Objects.equals(color, tshirt.color) && Objects.equals(description, tshirt.description);
+        return tshirtId == tshirt.tshirtId && quantity == tshirt.quantity && Objects.equals(size, tshirt.size) && Objects.equals(color, tshirt.color) && Objects.equals(description, tshirt.description) && Objects.equals(price, tshirt.price);
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.swing.text.html.Option;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class ConsoleRepositoryTest {
         console.setConsoleId(0);
         console.setModel("PS4");
         console.setManufacturer("Sony");
-        console.setPrice(200.00);
+        console.setPrice(BigDecimal.valueOf(200.00));
         console.setQuantity(10);
         console = repo.save(console);
     }
@@ -56,7 +57,7 @@ public class ConsoleRepositoryTest {
 
     @Test
     public void shouldUpdateConsole() {
-        console.setPrice(500.00);
+        console.setPrice(BigDecimal.valueOf(500.00));
         repo.save(console);
         Optional<Console> existingConsole = repo.findById(console.getConsoleId());
         assertEquals(existingConsole.get(), console);
@@ -74,14 +75,14 @@ public class ConsoleRepositoryTest {
         Console console1 = new Console();
         console1.setModel("xbox 360");
         console1.setManufacturer("Microsoft");
-        console1.setPrice(500.00);
+        console1.setPrice(BigDecimal.valueOf(500.00));
         console1.setQuantity(12);
         console1 = repo.save(console1);
 
         Console console2 = new Console();
         console2.setModel("xbox one");
         console2.setManufacturer("Microsoft");
-        console2.setPrice(500.00);
+        console2.setPrice(BigDecimal.valueOf(500.00));
         console2.setQuantity(1);
         console2 = repo.save(console2);
 
