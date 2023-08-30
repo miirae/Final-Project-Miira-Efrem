@@ -52,14 +52,14 @@ public class GameControllerTest {
     }
 
     @Test
-    void getGameById() throws Exception {
+    void shouldGetGameById() throws Exception {
         mockMvc.perform(get("/games/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
-    void updateGame() throws Exception {
+    void shouldUpdateGame() throws Exception {
         game.setEsrbRating("E10+");
 
         String inputJson = mapper.writeValueAsString(game);
@@ -72,7 +72,7 @@ public class GameControllerTest {
     }
 
     @Test
-    void deleteGameById() throws Exception {
+    void shouldDeleteGameById() throws Exception {
         mockMvc.perform(delete("/games/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
