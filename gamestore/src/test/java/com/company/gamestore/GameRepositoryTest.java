@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class GameRepositoryTest {
         game.setTitle("Call Of Duty: Modern Warfare");
         game.setEsrbRating("M");
         game.setDescription("First-person shooter video game");
-        game.setPrice(59.99);
+        game.setPrice(BigDecimal.valueOf(59.99));
         game.setStudio("Infinity Ward");
         game.setQuantity(1);
         game = gameRepository.save(game);
@@ -54,7 +55,7 @@ public class GameRepositoryTest {
 
     @Test
     public void shouldUpdateGame() {
-        game.setPrice(29.99);
+        game.setPrice(BigDecimal.valueOf(29.99));
         Game updatedGame = gameRepository.save(game);
         assertEquals(game, updatedGame);
     }
@@ -72,7 +73,7 @@ public class GameRepositoryTest {
         newGame.setTitle("Minecraft");
         newGame.setEsrbRating("E10+");
         newGame.setDescription("Creation game that allows users to build anything or learn to survive in pre-generated worlds");
-        newGame.setPrice(19.99);
+        newGame.setPrice(BigDecimal.valueOf(19.99));
         newGame.setStudio("Mojang");
         newGame.setQuantity(1);
         gameRepository.save(newGame);
@@ -88,7 +89,7 @@ public class GameRepositoryTest {
         newGame.setTitle("Grand Theft Auto V");
         newGame.setEsrbRating("M");
         newGame.setDescription("Action-adventure game played from either a third-person or first-person perspective");
-        newGame.setPrice(39.99);
+        newGame.setPrice(BigDecimal.valueOf(39.99));
         newGame.setStudio("Rockstar North");
         newGame.setQuantity(1);
         gameRepository.save(newGame);
@@ -104,7 +105,7 @@ public class GameRepositoryTest {
         newGame.setTitle("Grand Theft Auto V");
         newGame.setEsrbRating("M");
         newGame.setDescription("Action-adventure game played from either a third-person or first-person perspective");
-        newGame.setPrice(39.99);
+        newGame.setPrice(BigDecimal.valueOf(39.99));
         newGame.setStudio("Rockstar North");
         newGame.setQuantity(1);
         gameRepository.save(newGame);

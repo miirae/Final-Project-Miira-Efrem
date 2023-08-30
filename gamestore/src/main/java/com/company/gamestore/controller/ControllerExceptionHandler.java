@@ -42,6 +42,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public final ResponseEntity<CustomErrorResponse> notFoundException(NotFoundException e) {
         CustomErrorResponse response = new CustomErrorResponse(HttpStatus.NOT_FOUND.toString(), e.getMessage());
         response.setStatus(HttpStatus.NOT_FOUND.value());
@@ -50,10 +51,21 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public final ResponseEntity<CustomErrorResponse> handleAllExceptions(Exception e) {
         CustomErrorResponse response = new CustomErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage());
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setTimestamp(LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    // used in service layer for invalid arguments/logic
+    @ExceptionHandler(value = {IllegalArgumentException.class})
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ResponseEntity<CustomErrorResponse> illegalArgumentValidationError(IllegalArgumentException e){
+        CustomErrorResponse response = new CustomErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.toString(), e.getMessage());
+        response.setTimestamp(LocalDateTime.now());
+        response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }

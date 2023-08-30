@@ -36,7 +36,7 @@ public class GameControllerTest {
         game.setTitle("Call Of Duty: Modern Warfare");
         game.setEsrbRating("M");
         game.setDescription("First-person shooter video game");
-        game.setPrice(59.99);
+        game.setPrice(BigDecimal.valueOf(59.99));
         game.setStudio("Infinity Ward");
         game.setQuantity(1);
     }

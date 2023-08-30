@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class TshirtRepositoryTest {
         tshirt.setSize("S");
         tshirt.setColor("peach");
         tshirt.setDescription("made with 100% cotton");
-        tshirt.setPrice(10.99);
+        tshirt.setPrice(BigDecimal.valueOf(10.99));
         tshirt.setQuantity(1);
         tshirt = tshirtRepository.save(tshirt);
     }
@@ -77,7 +78,7 @@ public class TshirtRepositoryTest {
         newTshirt.setSize("M");
         newTshirt.setColor("Green");
         newTshirt.setDescription("made with 100% polyester");
-        newTshirt.setPrice(15.99);
+        newTshirt.setPrice(BigDecimal.valueOf(15.99));
         newTshirt.setQuantity(2);
         tshirtRepository.save(newTshirt);
 
@@ -93,7 +94,7 @@ public class TshirtRepositoryTest {
         newTshirt.setSize("XL");
         newTshirt.setColor("Black");
         newTshirt.setDescription("made with 100% silk");
-        newTshirt.setPrice(20.99);
+        newTshirt.setPrice(BigDecimal.valueOf(20.99));
         newTshirt.setQuantity(3);
         tshirtRepository.save(newTshirt);
 
