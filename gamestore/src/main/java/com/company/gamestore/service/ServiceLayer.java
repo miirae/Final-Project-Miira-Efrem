@@ -1,9 +1,6 @@
 package com.company.gamestore.service;
 
-import com.company.gamestore.model.Console;
-import com.company.gamestore.model.Game;
-import com.company.gamestore.model.Invoice;
-import com.company.gamestore.model.Tshirt;
+import com.company.gamestore.model.*;
 import com.company.gamestore.repository.*;
 import com.company.gamestore.viewmodel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +37,28 @@ public class ServiceLayer {
         this.gameRepository = gameRepository;
         this.consoleRepository = consoleRepository;
     }
-
     @Transactional
     public Invoice saveInvoice(@Valid InvoiceViewModel invoiceViewModel) {
 
-        // Persist Invoice
+        if(invoiceViewModel == null){
+            throw new IllegalArgumentException("InvoiceViewModel cannot be null");
+        }
+
+        // Create Invoice from InvoiceViewModel
+        Invoice invoice = createInvoiceFromViewModel(invoiceViewModel);
+
+        // Validate and update item quantity
+        validateAndUpdateItemQuantity(invoice);
+
+        // Calculate and set invoice totals
+        calculateAndSetInvoiceTotals(invoice);
+
+        invoiceRepository.save(invoice);
+
+        return invoice;
+    }
+
+    private Invoice createInvoiceFromViewModel(InvoiceViewModel invoiceViewModel) {
         Invoice invoice = new Invoice(
                 invoiceViewModel.getName(),
                 invoiceViewModel.getStreet(),
@@ -60,66 +74,115 @@ public class ServiceLayer {
                 invoiceViewModel.getProcessingFee(),
                 invoiceViewModel.getTotal());
 
-        //check "business logic" ...
-
-        BigDecimal itemPrice;
-        int itemQuantity;
-        int invoiceQuantity;
-
-
-        if(invoice.getName().toLowerCase() == "game"){
-            // game invoice
-            Optional<Game> game = gameRepository.findById(invoice.getId());
-
-            if(game.isEmpty()) throw new IllegalArgumentException("invoice error: game does not exist");
-
-            itemPrice = game.get().getPrice();
-            itemQuantity = game.get().getQuantity();
-            invoiceQuantity = invoice.getQuantity();
-            Game workingGame = game.get();
-
-            if(invoiceQuantity > itemQuantity || itemQuantity <= 0) throw new IllegalArgumentException("invoice error: game quantity exceeds availability");
-            workingGame.setQuantity(itemQuantity-invoiceQuantity);
-
-        }else if(invoice.getName().toLowerCase() == "console"){
-            // console invoice
-            Optional<Console> console = consoleRepository.findById(invoice.getId());
-
-            if(console.isEmpty()) throw new IllegalArgumentException("invoice error: console does not exist");
-
-            itemPrice = console.get().getPrice();
-            itemQuantity = console.get().getQuantity();
-            invoiceQuantity = invoice.getQuantity();
-            Console workingConsole = console.get();
-
-            if(invoiceQuantity > itemQuantity || itemQuantity <= 0) throw new IllegalArgumentException("invoice error: console quantity exceeds availability");
-            workingConsole.setQuantity(itemQuantity-invoiceQuantity);
-
-        }
-        else if(invoice.getName().toLowerCase() == "tshirt"){
-            // tshirt invoice
-            Optional<Tshirt> tshirt = tshirtRepository.findById(invoice.getId());
-
-            if(tshirt.isEmpty()) throw new IllegalArgumentException("invoice error: tshirt does not exist");
-
-            itemPrice = tshirt.get().getPrice();
-            itemQuantity = tshirt.get().getQuantity();
-            invoiceQuantity = invoice.getQuantity();
-            Tshirt workingTshirt = tshirt.get();
-
-            if(invoiceQuantity > itemQuantity || itemQuantity <= 0) throw new IllegalArgumentException("invoice error: tshirt quantity exceeds availability");
-            workingTshirt.setQuantity(itemQuantity-invoiceQuantity);
-
-        }else{
-            throw new IllegalArgumentException("Invalid type name");
-        }
-
-        invoice.setUnitPrice(itemPrice);
-
-        //TODO: Calculate subtotal
-
+        invoice.setItemId(invoiceViewModel.getItemId());
+        invoice.setItemType(invoiceViewModel.getItemType());
 
         return invoice;
     }
 
+
+
+    private BigDecimal validateAndUpdateGameInvoice(Invoice invoice, int invoiceQuantity) {
+        Optional<Game> game = gameRepository.findById(invoice.getItemId());
+
+        if(game.isEmpty()) throw new IllegalArgumentException("invoice error: game does not exist");
+
+        BigDecimal itemPrice = game.get().getPrice();
+        int itemQuantity = game.get().getQuantity();
+        Game workingGame = game.get();
+
+        if(invoiceQuantity > itemQuantity || itemQuantity <= 0) throw new IllegalArgumentException("invoice error: game quantity exceeds availability");
+        workingGame.setQuantity(itemQuantity-invoiceQuantity);
+        gameRepository.save(workingGame);
+
+        return itemPrice;
+    }
+
+    private BigDecimal validateAndUpdateConsoleInvoice(Invoice invoice, int invoiceQuantity) {
+        Optional<Console> console = consoleRepository.findById(invoice.getItemId());
+
+        if(console.isEmpty()) throw new IllegalArgumentException("invoice error: console does not exist");
+
+        BigDecimal itemPrice = console.get().getPrice();
+        int itemQuantity = console.get().getQuantity();
+        Console workingConsole = console.get();
+
+        if(invoiceQuantity > itemQuantity || itemQuantity <= 0) throw new IllegalArgumentException("invoice error: console quantity exceeds availability");
+        workingConsole.setQuantity(itemQuantity-invoiceQuantity);
+        consoleRepository.save(workingConsole);
+
+        return itemPrice;
+    }
+
+    private BigDecimal validateAndUpdateTshirtInvoice(Invoice invoice, int invoiceQuantity) {
+        Optional<Tshirt> tshirt = tshirtRepository.findById(invoice.getItemId());
+
+        if(tshirt.isEmpty()) throw new IllegalArgumentException("invoice error: tshirt does not exist");
+
+        BigDecimal itemPrice = tshirt.get().getPrice();
+        int itemQuantity = tshirt.get().getQuantity();
+        Tshirt workingTshirt = tshirt.get();
+
+        if(invoiceQuantity > itemQuantity || itemQuantity <= 0) throw new IllegalArgumentException("invoice error: tshirt quantity exceeds availability");
+        workingTshirt.setQuantity(itemQuantity-invoiceQuantity);
+        tshirtRepository.save(workingTshirt);
+
+        return itemPrice;
+    }
+
+// Similar methods for console and tshirt invoices...
+
+    private void calculateAndSetInvoiceTotals(Invoice invoice) {
+        int invoiceQuantity = invoice.getQuantity();
+        BigDecimal itemPrice = invoice.getUnitPrice();
+        String itemtype = invoice.getItemType();
+        BigDecimal inSubtotal = itemPrice.multiply(BigDecimal.valueOf(invoiceQuantity));
+        BigDecimal total = inSubtotal;
+
+        // tax
+        Optional<Tax> curTax = taxRepository.findByState(invoice.getState());
+        if(curTax.isEmpty()){
+            throw new IllegalArgumentException("Invoice error: Invalid State");
+        }
+        BigDecimal inTax = curTax.get().getRate().multiply(inSubtotal);
+        invoice.setTax(inTax);
+        total = total.add(inTax);
+
+        // business rule: the number of items in the order is greater than 10, in which case an additional
+        // processing fee of $15.49 is applied to the order.
+        Optional<Fee> curfee = feeRepository.findById(itemtype);
+        BigDecimal inFee = curfee.get().getFee();
+        if(invoiceQuantity > 10){
+            inFee = inFee.add(BigDecimal.valueOf(15.49));
+        }
+        invoice.setProcessingFee(inFee);
+        total = total.add(inFee);
+
+        invoice.setTotal(total);
+    }
+
+    private void validateAndUpdateItemQuantity(Invoice invoice) {
+        BigDecimal itemPrice;
+        int itemQuantity;
+        int invoiceQuantity  = invoice.getQuantity();
+        String itemtype = invoice.getItemType();
+
+        if(invoice.getName().equalsIgnoreCase("game")){
+            // game invoice
+            itemPrice = validateAndUpdateGameInvoice(invoice, invoiceQuantity);
+
+        } else if(invoice.getName().equalsIgnoreCase("console")){
+            // console invoice
+            itemPrice = validateAndUpdateConsoleInvoice(invoice, invoiceQuantity);
+
+        } else if(invoice.getName().equalsIgnoreCase("tshirt")){
+            // tshirt invoice
+            itemPrice = validateAndUpdateTshirtInvoice(invoice, invoiceQuantity);
+
+        } else {
+            throw new IllegalArgumentException("Invalid type name");
+        }
+
+        invoice.setUnitPrice(itemPrice);
+    }
 }
