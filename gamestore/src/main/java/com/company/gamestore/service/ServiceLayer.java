@@ -58,6 +58,22 @@ public class ServiceLayer {
         return invoice;
     }
 
+    public List<Invoice> findByName(String name){
+        return invoiceRepository.findByName(name);
+    }
+
+    public Invoice findById(int invoiceId){
+        Optional<Invoice> foundInvoice= invoiceRepository.findById(invoiceId);
+        if(foundInvoice.isPresent()) {
+            return foundInvoice.get();
+        }
+        return  null;
+    }
+
+    public List<Invoice> findAll(){
+        return invoiceRepository.findAll();
+    }
+
     private Invoice createInvoiceFromViewModel(InvoiceViewModel invoiceViewModel) {
         Invoice invoice = new Invoice(
                 invoiceViewModel.getName(),
