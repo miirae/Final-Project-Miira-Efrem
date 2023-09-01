@@ -37,6 +37,29 @@ public class ServiceLayer {
         this.gameRepository = gameRepository;
         this.consoleRepository = consoleRepository;
     }
+
+    private Invoice createInvoiceFromViewModel(InvoiceViewModel invoiceViewModel) {
+        Invoice invoice = new Invoice(
+                invoiceViewModel.getName(),
+                invoiceViewModel.getStreet(),
+                invoiceViewModel.getCity(),
+                invoiceViewModel.getState(),
+                invoiceViewModel.getZipcode(),
+                invoiceViewModel.getItemType(),
+                invoiceViewModel.getItemId(),
+                invoiceViewModel.getUnitPrice(),
+                invoiceViewModel.getQuantity(),
+                invoiceViewModel.getSubtotal(),
+                invoiceViewModel.getTax(),
+                invoiceViewModel.getProcessingFee(),
+                invoiceViewModel.getTotal());
+
+        invoice.setItemId(invoiceViewModel.getItemId());
+        invoice.setItemType(invoiceViewModel.getItemType());
+
+        return invoice;
+    }
+
     @Transactional
     public Invoice saveInvoice(@Valid InvoiceViewModel invoiceViewModel) {
 
@@ -73,29 +96,6 @@ public class ServiceLayer {
     public List<Invoice> findAll(){
         return invoiceRepository.findAll();
     }
-
-    private Invoice createInvoiceFromViewModel(InvoiceViewModel invoiceViewModel) {
-        Invoice invoice = new Invoice(
-                invoiceViewModel.getName(),
-                invoiceViewModel.getStreet(),
-                invoiceViewModel.getCity(),
-                invoiceViewModel.getState(),
-                invoiceViewModel.getZipcode(),
-                invoiceViewModel.getItemType(),
-                invoiceViewModel.getItemId(),
-                invoiceViewModel.getUnitPrice(),
-                invoiceViewModel.getQuantity(),
-                invoiceViewModel.getSubtotal(),
-                invoiceViewModel.getTax(),
-                invoiceViewModel.getProcessingFee(),
-                invoiceViewModel.getTotal());
-
-        invoice.setItemId(invoiceViewModel.getItemId());
-        invoice.setItemType(invoiceViewModel.getItemType());
-
-        return invoice;
-    }
-
 
 
     private BigDecimal validateAndUpdateGameInvoice(Invoice invoice, int invoiceQuantity) {
@@ -183,20 +183,20 @@ public class ServiceLayer {
         int invoiceQuantity  = invoice.getQuantity();
         String itemtype = invoice.getItemType();
 
-        if(invoice.getName().equalsIgnoreCase("game")){
+        if(itemtype.equalsIgnoreCase("game")){
             // game invoice
             itemPrice = validateAndUpdateGameInvoice(invoice, invoiceQuantity);
 
-        } else if(invoice.getName().equalsIgnoreCase("console")){
+        } else if(itemtype.equalsIgnoreCase("console")){
             // console invoice
             itemPrice = validateAndUpdateConsoleInvoice(invoice, invoiceQuantity);
 
-        } else if(invoice.getName().equalsIgnoreCase("tshirt")){
+        } else if(itemtype.equalsIgnoreCase("tshirt")){
             // tshirt invoice
             itemPrice = validateAndUpdateTshirtInvoice(invoice, invoiceQuantity);
 
         } else {
-            throw new IllegalArgumentException("Invalid type name");
+            throw new IllegalArgumentException("Invalid type name " + invoice.getName());
         }
 
         invoice.setUnitPrice(itemPrice);
