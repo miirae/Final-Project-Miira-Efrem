@@ -15,7 +15,7 @@ public class Game implements Serializable {
     @Id
     @Column(name= "game_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer gameId;
+    private int gameId;
 
     @NotEmpty(message = "You must provide a value for title.")
     @Size(max=50, message = "Title must be 50 chars or less.")
@@ -39,13 +39,13 @@ public class Game implements Serializable {
     private String studio;
 
     @Positive(message = "quantity must be positive")
-    private Integer quantity;
+    private int quantity;
 
-    public Integer getGameId() {
+    public int getGameId() {
         return gameId;
     }
 
-    public void setGameId(Integer gameId) {
+    public void setGameId(int gameId) {
         this.gameId = gameId;
     }
     public String getTitle() {
@@ -88,11 +88,11 @@ public class Game implements Serializable {
         this.studio = studio;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
@@ -101,7 +101,7 @@ public class Game implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Game)) return false;
         Game game = (Game) o;
-        return Objects.equals(gameId, game.gameId) && Objects.equals(title, game.title) && Objects.equals(esrbRating, game.esrbRating) && Objects.equals(description, game.description) && Objects.equals(price, game.price) && Objects.equals(studio, game.studio) && Objects.equals(quantity, game.quantity);
+        return gameId == game.gameId && quantity == game.quantity && Objects.equals(title, game.title) && Objects.equals(esrbRating, game.esrbRating) && Objects.equals(description, game.description) && Objects.equals(price, game.price) && Objects.equals(studio, game.studio);
     }
 
     @Override
