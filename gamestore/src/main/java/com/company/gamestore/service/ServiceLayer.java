@@ -158,7 +158,7 @@ public class ServiceLayer {
         // tax
         Optional<Tax> curTax = taxRepository.findByState(invoice.getState());
         if(curTax.isEmpty()){
-            throw new IllegalArgumentException("Invoice error: Invalid State");
+            throw new IllegalArgumentException("Invoice error: Invalid State " + invoice.getState());
         }
         BigDecimal inTax = curTax.get().getRate().multiply(inSubtotal);
         invoice.setTax(inTax);
